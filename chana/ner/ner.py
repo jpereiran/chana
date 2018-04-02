@@ -48,17 +48,8 @@ class ShipiboRuleNER:
             first_letter = word[0]
             array[first_letter].append(word)
         f.close()
-
-
-
-
-
-for key, elem in personas.items():
-    personas[key]='|'.join(elem)
-for key, elem in locaciones.items():
-    locaciones[key]='|'.join(elem)
-for key, elem in organizaciones.items():
-    organizaciones[key]='|'.join(elem)
+        for key, elem in array.items():
+            array[key]='|'.join(elem)
 
 
 

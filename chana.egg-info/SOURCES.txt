@@ -1,0 +1,6 @@
+setup.cfg
+setup.py
+chana.egg-info/PKG-INFO
+chana.egg-info/SOURCES.txt
+chana.egg-info/dependency_links.txt
+chana.egg-info/top_level.txt

@@ -4,7 +4,7 @@ from os import path
 
 setup(
     name='chana',  # Required
-    version='0.1.0.dev1',  # Required
+    version='0.1.1.dev1',  # Required
     description='A module of NLP tools for the shipibo-konibo language',  # Required
 
     url='https://github.com/jpereiran/chana',  # Optional
@@ -17,10 +17,6 @@ setup(
         #   4 - Beta
         #   5 - Production/Stable
         'Development Status :: 3 - Alpha',
-
-        # Indicate who your project is intended for
-        'Intended Audience :: Developers',
-        'Topic :: Natural Language Processing :: Various Tools',
 
         # Pick your license as you wish
         'License :: OSI Approved :: MIT License',

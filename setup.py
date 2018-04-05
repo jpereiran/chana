@@ -31,7 +31,10 @@ setup(
 
     keywords='nlp shipibo development',  # Optional
     
-    packages= ['chana','chana.lemmatizer'],  # Required
+    packages= ['chana'],  # Required
+
+    package_data={'files': ['*.*']},
+    include_package_data=True,
 
     # List additional URLs that are relevant to your project as a dict.
     #

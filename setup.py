@@ -4,7 +4,7 @@ from os import path
 
 setup(
     name='chana',  # Required
-    version='0.1.1.dev1',  # Required
+    version='0.1.2.dev1',  # Required
     description='A module of NLP tools for the shipibo-konibo language',  # Required
 
     url='https://github.com/jpereiran/chana',  # Optional
@@ -31,7 +31,7 @@ setup(
 
     keywords='nlp shipibo development',  # Optional
     
-    packages= ['chana'],  # Required
+    packages= ['chana','chana.lemmatizer'],  # Required
 
     # List additional URLs that are relevant to your project as a dict.
     #

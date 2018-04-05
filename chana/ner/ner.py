@@ -1,7 +1,7 @@
 #coding=UTF-8
 """
 Named-entity recognizer for shipibo-konibo
-General functions to use the NER for shipibo-konibo or to train a new one for other languages.
+General functions to use the NER for shipibo-konibo.
 
 Source model for the shipibo NER is from the Chana project
 """
@@ -35,9 +35,9 @@ class ShipiboRuleNER:
         self.locations = dict.fromkeys(letters, [])
         self.organizations = dict.fromkeys(letters, [])
 
-        load_array('files/CRF/per_esp_s.txt',self.names)
-        load_array('files/CRF/loc_esp_s.txt',self.locations)
-        load_array('files/CRF/org_esp_s.txt',self.organizations)
+        load_array('files/per_esp_s.txt',self.names)
+        load_array('files/loc_esp_s.txt',self.locations)
+        load_array('files/org_esp_s.txt',self.organizations)
 
 
     def load_array(file,array):
@@ -134,6 +134,9 @@ def basadoEnReglas(oracion):
     verificaNumeros(palabras,entityTag)
     verificaFechas(palabras,entityTag)
     return entityTag
+
+
+
 
 
 

@@ -8,6 +8,7 @@ Both lemmatizers use a KNeighborsClassifier from scikit-learn
 Source model for the shipibo lemmatizer is from the Chana project
 """
 import codecs
+import os
 import numpy as np
 from sklearn.externals import joblib
 from sklearn import neighbors
@@ -40,7 +41,9 @@ def has_shipibo_suffix(str):
     """
     Function that returns the possible existence of a shipo suffix in a a word
     """
-    suffixes = codecs.open("files/lemmatizer/shipibo_suffixes.dat", "r", "utf-8")
+    my_path = os.path.abspath(os.path.dirname(__file__))
+    path = os.path.join(my_path, "files/lemmatizer/shipibo_suffixes.dat")
+    suffixes = codecs.open(path, "r", "utf-8")
     lines = suffixes.read().splitlines()
     lines = tuple(lines)
     if str.endswith(lines):
@@ -52,7 +55,9 @@ def shipibo_suffixes():
     """
     Function that returns a list with all the shipibo suffixes
     """
-    suffixes = codecs.open("files/lemmatizer/shipibo_suffixes.txt", "r", "utf-8")
+    my_path = os.path.abspath(os.path.dirname(__file__))
+    path = os.path.join(my_path, "files/lemmatizer/shipibo_suffixes.dat")
+    suffixes = codecs.open(path, "r", "utf-8")
     shipibo_suffixes = suffixes.read().splitlines()
     return(shipibo_suffixes)
 
@@ -63,7 +68,9 @@ class ShipiboLemmatizer:
     """
 
     def __init__(self):
-        self.lemmatizer = joblib.load('files/lemmatizer/shipibo_knn_model.pkl')
+        my_path = os.path.abspath(os.path.dirname(__file__))
+        path = os.path.join(my_path, "files/lemmatizer/shipibo_knn_model.pkl")
+        self.lemmatizer = joblib.load(path)
         self.features_length = 18
 
     def preprocess_word(self, word):

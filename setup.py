@@ -2,9 +2,11 @@ from setuptools import setup, find_packages
 from codecs import open
 from os import path
 
+files = ["files/*"]
+
 setup(
     name='chana',  # Required
-    version='0.1.2.dev1',  # Required
+    version='0.1.5.dev1',  # Required
     description='A module of NLP tools for the shipibo-konibo language',  # Required
 
     url='https://github.com/jpereiran/chana',  # Optional
@@ -32,8 +34,7 @@ setup(
     keywords='nlp shipibo development',  # Optional
     
     packages= ['chana'],  # Required
-
-    package_data={'files': ['*.*']},
+    package_data = {'chana' : files },
     include_package_data=True,
 
     # List additional URLs that are relevant to your project as a dict.

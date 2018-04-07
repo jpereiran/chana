@@ -1,20 +1,28 @@
 #coding=UTF-8
 """
 Named-entity recognizer for shipibo-konibo
-General functions to use the NER for shipibo-konibo.
+
+General functions to use the NER for shipibo-konibo
+The model use predefined rules for the language and a crf from pycrfsuite
 
 Source model for the shipibo NER is from the Chana project
 """
 import codecs
 import collections
 import re
+import os
 import string
 import numpy as np
 import pycrfsuite
 
 
 def load_array(file,array):
-    f = codecs.open(file, "r", encoding= "utf-8")
+    """
+    Function that loads the information of a file into an array
+    """
+    my_path = os.path.abspath(os.path.dirname(__file__))
+    path = os.path.join(my_path, file)
+    f = codecs.open(path, "r", encoding= "utf-8")
     f_read = f.read()
     lines = f_read.splitlines()
     for word in lines:
@@ -25,19 +33,25 @@ def load_array(file,array):
         array[key]='|'.join(elem)
 
 def is_number(word):
+    """
+    Function that returns 'NUM' if a shipo word is a number or False if not
+    """
     numbers=['westiora','rabé','kimisha','chosko','pichika','sokota','kanchis','posaka','iskon','chonka','pacha','waranka']
     if word.lower() in numbers:
         return 'NUM'
-    else
+    else:
         return False
 
 def is_location(word):
+    """
+    Function that returns 'LOC' if a shipo word is a location or False if not
+    """
     pattern = re.compile('ain|nko|ainko|mea|meax|nkonia|nkoniax|kea|keax|ainoa|ainoax|oa|oax')
     
     letters = string.ascii_uppercase + 'Ñ'
     locations = dict.fromkeys(letters, [])
     
-    load_array('files/CRF/per_esp_s.txt', locations)
+    load_array('files/ner/per_esp_s.dat', locations)
 
     if word.istitle():
         first_letter = word[0]
@@ -48,11 +62,14 @@ def is_location(word):
     else:
         return False
 
-def is_person(word):
+def is_name(word):
+    """
+    Function that returns 'PER' if a shipo word is a proper name/person or False if not
+    """
     letters = string.ascii_uppercase + 'Ñ'
     names = dict.fromkeys(letters, [])
     
-    load_array('files/CRF/per_esp_s.txt', names)
+    load_array('files/ner/per_esp_s.dat', names)
 
     if word.title():
         first_letter=word[0]
@@ -62,10 +79,13 @@ def is_person(word):
         return False
 
 def is_organization(word):
+    """
+    Function that returns 'ORG' if a shipo word is an organization or False if not
+    """
     letters = string.ascii_uppercase + 'Ñ'
     organizations = dict.fromkeys(letters, [])
     
-    load_array('files/CRF/per_esp_s.txt', organizations)
+    load_array('files/ner/per_esp_s.dat', organizations)
 
     if word.title():
         first_letter=word[0]
@@ -74,7 +94,10 @@ def is_organization(word):
     else:
         return False
 
-def verificaFechas(word):
+def is_date(word):
+    """
+    Function that returns 'FEC' if a shipo word is a date or False if not
+    """
     months=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','setiembre','octubre','noviembre','diciembre']
     if word.lower() in months:
         return 'FEC'
@@ -84,13 +107,15 @@ class ShipiboNER:
     """
     Instance of the rule based NER for shipibo
     """
-
     def __init__(self):
+        """
+        Constructor of the class that loads the crf model and the information files
+        """
         self.letters = string.ascii_uppercase + 'Ñ'
         
-        self.names = dict.fromkeys(letters, [])
-        self.locations = dict.fromkeys(letters, [])
-        self.organizations = dict.fromkeys(letters, [])
+        self.names = dict.fromkeys(self.letters, [])
+        self.locations = dict.fromkeys(self.letters, [])
+        self.organizations = dict.fromkeys(self.letters, [])
 
         self.tagger = pycrfsuite.Tagger()
         self.tagger.open('files/ner/crf_ner.crfsuite')
@@ -100,21 +125,10 @@ class ShipiboNER:
         load_array('files/ner/loc_esp_s.dat',self.locations)
         load_array('files/ner/org_esp_s.dat',self.organizations)
 
-
-    def load_array(file,array):
-        f = codecs.open(file, "r", encoding= "utf-8")
-        f_read = f.read()
-        lines = f_read.splitlines()
-        for word in lines:
-            first_letter = word[0]
-            array[first_letter].append(word)
-        f.close()
-        for key, elem in array.items():
-            array[key]='|'.join(elem)
-
-
-    def check_locations(words,entityTag):
-        #sufijos locaciones
+    def check_locations(self,words,entityTag):
+        """
+        Method that tags the locations of a sentence with 'LOC'
+        """
         pattern = re.compile('ain|nko|ainko|mea|meax|nkonia|nkoniax|kea|keax|ainoa|ainoax|oa|oax')
         idWord=0
         last_Loc=-1
@@ -129,7 +143,10 @@ class ShipiboNER:
                         last_Loc=idWord
             idWord+=1
 
-    def check_names(words,entityTag):
+    def check_names(self,words,entityTag):
+        """
+        Method that tags the names/persons of a sentence with 'PER'
+        """
         idWord=0
         last_per=-1
         for word in words:
@@ -140,8 +157,10 @@ class ShipiboNER:
                     last_per=idWord
             idWord+=1
 
-
-    def check_organizations(words,entityTag):
+    def check_organizations(self,words,entityTag):
+        """
+        Method that tags the organizations of a sentence with 'ORG'
+        """
         idWord=0
         last_org=-1
         for word in words:
@@ -152,7 +171,10 @@ class ShipiboNER:
                     last_org=idWord
             idWord+=1
 
-    def check_numbers(words,entityTag):
+    def check_numbers(self,words,entityTag):
+        """
+        Method that tags the numbers of a sentence with 'NUM'
+        """
         numbers=['westiora','rabé','kimisha','chosko','pichika','sokota','kanchis','posaka','iskon','chonka','pacha','waranka']
         idWord=0
         for word in words:
@@ -160,7 +182,10 @@ class ShipiboNER:
                 entityTag[idWord]='NUM'
             idWord+=1
 
-    def check_dates(words,entityTag):
+    def check_dates(self,words,entityTag):
+        """
+        Method that tags the dates of a sentence with 'FEC'
+        """
         months=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','setiembre','octubre','noviembre','diciembre']
         idWord=0
         last_date=-1
@@ -168,30 +193,35 @@ class ShipiboNER:
             if word.lower() in months:
                 entityTag[idWord]='FEC'
                 last_date=idWord
-                if i > 0:
+                if idWord > 0:
                     pre=words[idWord-1]
                     if pre.isdigit():
                         entityTag[idWord-1]='FEC'
-                if i<len(words)-1:
+                if idWord<len(words)-1:
                     pos=words[idWord+1]
                     if pos.isdigit():
                         entityTag[idWord+1]='FEC'
             idWord+=1
 
-    def rule_tag(sentence):
+    def rule_tag(self, sentence):
+        """
+        Method that tags a sentence with a rule based system
+        """
         words=sentence.split()
         entityTag=[]
         for x in range(len(words)):
             entityTag.append('O')
-        check_names(words,entityTag)
-        check_organizations(words,entityTag)
-        check_locations(words,entityTag)
-        check_numbers(words,entityTag)
-        check_dates(words,entityTag)
+        self.check_names(words,entityTag)
+        self.check_organizations(words,entityTag)
+        self.check_locations(words,entityTag)
+        self.check_numbers(words,entityTag)
+        self.check_dates(words,entityTag)
         return entityTag
 
-
-    def word2features(sent, i):
+    def word2features(self,sent, i):
+        """
+        Method that add features to the words of a sentence to be tagged by the crf model
+        """
         word = sent[i][0]
         tagBR = sent[i][1]
         features = [
@@ -234,21 +264,24 @@ class ShipiboNER:
 
         return features
 
+    def sent2features(self,sent):
+        """
+        Method that add features to a sentence to be tagged by the crf model
+        """
+        return [self.word2features(sent, i) for i in range(len(sent))]
 
-    def sent2features(sent):
-        return [word2features(sent, i) for i in range(len(sent))]
-
-
-
-    def tag(sentence):
-        entityTagBR=self.rule_tag(sentence)
+    def crf_tag(self,sentence):
+        """
+        Method that tags a sentence with the rule based method and then with the crf model
+        """
+        entityTag_R=self.rule_tag(sentence)
         vectorWord=[]
         words=sentence.split()
         idWord=0
         for word in words:
-                tag_BR=entityTagBR[idWord]
-                etiqueta=(word,tag_BR)
-                vectorWord.append(etiqueta)
+                tag_r=entityTag_R[idWord]
+                result_tag=(word,tag_r)
+                vectorWord.append(result_tag)
                 idWord+=1
-        entityTag=self.tagger.tag(sent2features(vectorWord))
+        entityTag=self.tagger.tag(self.sent2features(vectorWord))
         return entityTag

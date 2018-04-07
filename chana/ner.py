@@ -118,7 +118,9 @@ class ShipiboNER:
         self.organizations = dict.fromkeys(self.letters, [])
 
         self.tagger = pycrfsuite.Tagger()
-        self.tagger.open('files/ner/crf_ner.crfsuite')
+        my_path = os.path.abspath(os.path.dirname(__file__))
+        path = os.path.join(my_path, 'files/ner/crf_ner.crfsuite')
+        self.tagger.open(path)
 
 
         load_array('files/ner/per_esp_s.dat',self.names)

@@ -12,6 +12,9 @@ import os
 import numpy as np
 from sklearn.externals import joblib
 from sklearn import neighbors
+import warnings
+
+warnings.filterwarnings("ignore")
 
 def replace_last(source_string, replace_what, replace_with):
     """

@@ -127,7 +127,7 @@ class ShipiboNER:
         load_array('files/ner/loc_esp_s.dat',self.locations)
         load_array('files/ner/org_esp_s.dat',self.organizations)
 
-    def check_locations(self,words,entityTag):
+    def check_locations(self,words,entity_tag):
         """
         Method that tags the locations of a sentence with 'LOC'
         """
@@ -138,14 +138,14 @@ class ShipiboNER:
             if word.istitle():
                 first_letter=word[0]
                 if pattern.search(word):
-                    entityTag[idWord]='LOC'
+                    entity_tag[idWord]='LOC'
                     last_Loc=idWord
                 elif re.search('[ÑA-Z]', first_letter)!=None and re.compile(self.locations[first_letter]).search(word):
-                        entityTag[idWord]='LOC'
+                        entity_tag[idWord]='LOC'
                         last_Loc=idWord
             idWord+=1
 
-    def check_names(self,words,entityTag):
+    def check_names(self,words,entity_tag):
         """
         Method that tags the names/persons of a sentence with 'PER'
         """
@@ -155,11 +155,11 @@ class ShipiboNER:
             if word.title():
                 first_letter=word[0]
                 if re.search('[ÑA-Z]', first_letter)!=None and re.compile(self.names[first_letter]).search(word):
-                    entityTag[idWord]='PER'
+                    entity_tag[idWord]='PER'
                     last_per=idWord
             idWord+=1
 
-    def check_organizations(self,words,entityTag):
+    def check_organizations(self,words,entity_tag):
         """
         Method that tags the organizations of a sentence with 'ORG'
         """
@@ -169,11 +169,11 @@ class ShipiboNER:
             if word.title():
                 first_letter=word[0]
                 if re.search('[ÑA-Z]', first_letter)!=None and re.compile(self.organizations[first_letter]).search(word):
-                    entityTag[idWord]='ORG'
+                    entity_tag[idWord]='ORG'
                     last_org=idWord
             idWord+=1
 
-    def check_numbers(self,words,entityTag):
+    def check_numbers(self,words,entity_tag):
         """
         Method that tags the numbers of a sentence with 'NUM'
         """
@@ -181,10 +181,10 @@ class ShipiboNER:
         idWord=0
         for word in words:
             if word.lower() in numbers:
-                entityTag[idWord]='NUM'
+                entity_tag[idWord]='NUM'
             idWord+=1
 
-    def check_dates(self,words,entityTag):
+    def check_dates(self,words,entity_tag):
         """
         Method that tags the dates of a sentence with 'FEC'
         """
@@ -193,16 +193,16 @@ class ShipiboNER:
         last_date=-1
         for word in words:
             if word.lower() in months:
-                entityTag[idWord]='FEC'
+                entity_tag[idWord]='FEC'
                 last_date=idWord
                 if idWord > 0:
                     pre=words[idWord-1]
                     if pre.isdigit():
-                        entityTag[idWord-1]='FEC'
+                        entity_tag[idWord-1]='FEC'
                 if idWord<len(words)-1:
                     pos=words[idWord+1]
                     if pos.isdigit():
-                        entityTag[idWord+1]='FEC'
+                        entity_tag[idWord+1]='FEC'
             idWord+=1
 
     def rule_tag(self, sentence):
@@ -210,15 +210,15 @@ class ShipiboNER:
         Method that tags a sentence with a rule based system
         """
         words=sentence.split()
-        entityTag=[]
+        entity_tag=[]
         for x in range(len(words)):
-            entityTag.append('O')
-        self.check_names(words,entityTag)
-        self.check_organizations(words,entityTag)
-        self.check_locations(words,entityTag)
-        self.check_numbers(words,entityTag)
-        self.check_dates(words,entityTag)
-        return entityTag
+            entity_tag.append('O')
+        self.check_names(words,entity_tag)
+        self.check_organizations(words,entity_tag)
+        self.check_locations(words,entity_tag)
+        self.check_numbers(words,entity_tag)
+        self.check_dates(words,entity_tag)
+        return entity_tag
 
     def word2features(self,sent, i):
         """
@@ -276,14 +276,14 @@ class ShipiboNER:
         """
         Method that tags a sentence with the rule based method and then with the crf model
         """
-        entityTag_R=self.rule_tag(sentence)
+        entity_tag_R=self.rule_tag(sentence)
         vectorWord=[]
         words=sentence.split()
         idWord=0
         for word in words:
-                tag_r=entityTag_R[idWord]
+                tag_r=entity_tag_R[idWord]
                 result_tag=(word,tag_r)
                 vectorWord.append(result_tag)
                 idWord+=1
-        entityTag=self.tagger.tag(self.sent2features(vectorWord))
-        return entityTag
+        entity_tag=self.tagger.tag(self.sent2features(vectorWord))
+        return entity_tag

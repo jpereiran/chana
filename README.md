@@ -23,6 +23,7 @@ Chana requires:
 - Python (>= 3.4)
 - NumPy (>= 1.13.1)
 - Scikit-learn (>= 0.18.1)
+- Python-crfsuite (>= 0.9.5)
 
 
 ### User installation

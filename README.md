@@ -2,15 +2,14 @@
 
 chana is a Python module of various NLP tools for the Shipibo-Konibo. 
 Some of these tools can be reused on other peruvian indigenous and/or highly agglutinative languages. 
-It is built on top of scikit-learn and distributed under ... license.
+It is built on top of scikit-learn and distributed under MIT license.
 
 Chana has various NLP tools such as:
 
 * Lemmatizer.
 * Part-of-Speech tagger. 
 * Named Entity annotation.
-* Morphologic Analizer.
-* Spellchecker.
+* Syllabificator.
 
 Project website: http://chana.inf.pucp.edu.pe
 
@@ -23,7 +22,7 @@ Chana requires:
 
 - Python (>= 3.4)
 - NumPy (>= 1.13.1)
-- Scikit-learn (= 0.18.1)
+- Scikit-learn (>= 0.18.1)
 
 
 ### User installation
@@ -40,7 +39,7 @@ pip install chana
 
 ### Important links
 
-- Official source code repo: https://github.com/...
+- Official source code repo: https://github.com/jpereiran/chana
 - Download releases: https://pypi.python.org/pypi/...
 - HTML documentation (stable release): http://chana.inf.pucp.edu.pe
 
@@ -54,15 +53,14 @@ pip install chana
 
 For any question and feedback please contact:
 
-- [José Pereira Noriega](jpereira@pucp.edu.pe)
-- [Rodolfo Mercado Gonzales](rmercado@pucp.edu.pe)
-- [Arturo Oncevay Marcos](arturo.oncevay@pucp.edu.pe)
+- José Pereira Noriega (jpereira@pucp.edu.pe)
+- Rodolfo Mercado Gonzales (rmercado@pucp.edu.pe)
+- Arturo Oncevay Marcos (arturo.oncevay@pucp.edu.pe)
 
 
 ### Acknowledgments
 
-- José Pereira Noriega
+- José Pereira Noriega 
 - Rodolfo Mercado Gonzales
-- ...
-- ...
+- Vivian Góngora Patrón
 

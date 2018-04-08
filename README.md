@@ -1,4 +1,4 @@
-# Chana: An NLP toolkit the Shipibo-Konibo language of Peru.
+# Chana: An NLP toolkit for the Shipibo-Konibo language of Peru.
 
 chana is a Python module of various NLP tools for the Shipibo-Konibo. 
 Some of these tools can be reused on other peruvian indigenous and/or highly agglutinative languages. 
